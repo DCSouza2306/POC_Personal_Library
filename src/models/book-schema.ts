@@ -3,7 +3,7 @@ import { book } from "../protocols";
 
 export const bookSchema = joi.object<book>({
     title: joi.string().required(),
-    authors: joi.array().required(),
+    author: joi.string().required(),
     publishCompany: joi.string().required(),
     year: joi.number().required(),
     edition: joi.string().required()

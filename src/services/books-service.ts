@@ -10,19 +10,14 @@ async function postBook(book: book){
         };
         const compId = publishCompany.rows[0].id;
 
-        const author = await booksRepository.getAuthorId(book.authors);
+        const author = await booksRepository.getAuthorId(book.author);
         if(author.rowCount == 0){
             throw notFoundError("Can not found author")
         };
         const authorId = author.rows[0].id;
 
-        await booksRepository.insertBook(book, compId);
+        await booksRepository.insertBook(book, compId, authorId);
 
-        const insertedBook = await booksRepository.getBooks();
-
-        const bookId = insertedBook.rows[insertedBook.rowCount - 1].id
-
-        await booksRepository.insertAuthorBook(bookId, authorId);
 
     } catch(error){
         throw error
@@ -41,9 +36,30 @@ async function getBooks(name: string){
     }
 }
 
+async function updateBook(book: book, id: number){
+    try{
+        const publishCompany = await booksRepository.getPublishingCompId(book.publishCompany);
+        if(publishCompany.rowCount == 0){
+            throw notFoundError("Can not found publishing company")
+        };
+        const compId = publishCompany.rows[0].id;
+
+        const author = await booksRepository.getAuthorId(book.author);
+        if(author.rowCount == 0){
+            throw notFoundError("Can not found author")
+        };
+        const authorId = author.rows[0].id;
+
+        await booksRepository.updateBook(book, compId, authorId);
+    } catch(error) {
+        throw error
+    }
+}
+
 const booksService = {
     postBook,
-    getBooks
+    getBooks,
+    updateBook
 }
 
 export default booksService

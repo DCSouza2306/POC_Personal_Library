@@ -1,6 +1,6 @@
 export type book = {
     title: string,
-    authors: string,
+    author: string,
     publishCompany: string,
     year: number,
     edition: string

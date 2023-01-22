@@ -19,10 +19,20 @@ export async function getBooks(req: Request, res: Response){
     try{
         const { name } = req.query as Record<string, string> 
         const books = await booksService.getBooks(name);
-
-
+        res.status(httpStatus.OK).send(books.rows)
     } catch(error){
-        console.log
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
+    }
+}
+
+export async function updateBook(req: Request, res: Response){
+    try{
+        const params = req.params;
+        const id = Number(params.id);
+
+        await booksService.updateBook(req.body, id)
+    } catch(error){
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
     }
 }
 

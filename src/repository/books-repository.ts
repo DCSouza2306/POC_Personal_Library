@@ -22,12 +22,12 @@ async function getAuthorId(author: string){
     }
 }
 
-async function insertBook(book: book, compId: number){
+async function insertBook(book: book, compId: number, authorId: number){
     try{
         return db.query(`
-            INSERT INTO books ("title", "publishing_comp_id", "year", "edition")
-            VALUES ($1, $2, $3, $4);
-        `,[book.title, compId, book.year, book.edition])
+            INSERT INTO books ("title","author_id" "publishing_comp_id", "year", "edition")
+            VALUES ($1, $2, $3, $4, $5);
+        `,[book.title, authorId, compId, book.year, book.edition])
     } catch(error) {
         throw error
     }
@@ -43,17 +43,6 @@ async function getBooks(){
     }
 }
 
-async function insertAuthorBook(bookId: number, authorId: number){
-    try{
-        return db.query(`
-            INSERT INTO "books_authors" ("book_id", "author_id")
-            VALUES($1, $2);
-        `,[bookId, authorId])
-    } catch(error) {
-        throw error
-    }
-}
-
 async function getBooksByName(name: string){
     try{
         return db.query<BookEntity>(`
@@ -64,13 +53,23 @@ async function getBooksByName(name: string){
     }
 }
 
+async function updateBook(book: book, compId: number, authorId: number){
+    try{
+        return db.query(`
+            UPDATE books SET title = $1, "author_id" = $2, "publishing_comp_id" = $3, year = $4, edition = $5
+        `,[book.title, authorId, compId, book.year, book.edition])
+    } catch(error) {
+        throw error
+    }
+}
+
 const booksRepository = {
     getPublishingCompId,
     getAuthorId,
     insertBook,
     getBooks,
-    insertAuthorBook,
-    getBooksByName
+    getBooksByName,
+    updateBook
 }
 
 export default booksRepository
