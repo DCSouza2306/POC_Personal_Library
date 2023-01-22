@@ -54,3 +54,15 @@ export async function deleteBook(req: Request, res: Response){
     }
 }
 
+export async function getBookByAuthor(req: Request, res: Response){
+    try{
+        const params = req.params;
+        const id = Number(params.id);
+
+        const books = await booksService.getBookByAuthor(id);
+        res.status(httpStatus.OK).send(books.rows)
+    } catch(error){
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
+    }
+}
+

@@ -64,11 +64,21 @@ async function deleteBook(id: number){
     }
 }
 
+async function getBookByAuthor(id: number){
+    try{
+       const books = await booksRepository.getBookByAuthor(id);
+        return books;
+    } catch(error){
+        throw error
+    }
+}
+
 const booksService = {
     postBook,
     getBooks,
     updateBook,
-    deleteBook
+    deleteBook,
+    getBookByAuthor
 }
 
 export default booksService

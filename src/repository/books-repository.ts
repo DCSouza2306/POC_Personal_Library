@@ -71,6 +71,16 @@ async function deleteBook(id: number){
     } catch(error){
         throw error
     }
+};
+
+async function getBookByAuthor(id: number){
+    try{
+        return db.query(`
+            SELECT * FROM books WHERE "author_id" = $1
+        `,[id])
+    } catch(error){
+        throw error
+    }
 }
 
 const booksRepository = {
@@ -79,6 +89,7 @@ const booksRepository = {
     insertBook,
     getBooks,
     getBooksByName,
+    getBookByAuthor,
     updateBook,
     deleteBook
 }
