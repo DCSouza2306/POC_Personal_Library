@@ -29,8 +29,21 @@ async function postBook(book: book){
     }
 }
 
+async function getBooks(name: string){
+    try{
+        if(name == undefined){
+            return await booksRepository.getBooks();
+        } else {
+            return await booksRepository.getBooksByName(name);
+        }
+    } catch(error) {
+        throw error
+    }
+}
+
 const booksService = {
-    postBook
+    postBook,
+    getBooks
 }
 
 export default booksService

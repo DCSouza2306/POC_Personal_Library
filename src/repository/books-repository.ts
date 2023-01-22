@@ -54,12 +54,23 @@ async function insertAuthorBook(bookId: number, authorId: number){
     }
 }
 
+async function getBooksByName(name: string){
+    try{
+        return db.query<BookEntity>(`
+            SELECT * FROM books WHERE "title" ILIKE '%' || $1 || '%';
+        `,[name])
+    } catch(error) {
+        throw error
+    }
+}
+
 const booksRepository = {
     getPublishingCompId,
     getAuthorId,
     insertBook,
     getBooks,
-    insertAuthorBook
+    insertAuthorBook,
+    getBooksByName
 }
 
 export default booksRepository
