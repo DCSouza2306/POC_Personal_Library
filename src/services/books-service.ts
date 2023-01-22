@@ -56,10 +56,19 @@ async function updateBook(book: book, id: number){
     }
 }
 
+async function deleteBook(id: number){
+    try{
+        await booksRepository.deleteBook(id)
+    } catch(error){
+        throw error
+    }
+}
+
 const booksService = {
     postBook,
     getBooks,
-    updateBook
+    updateBook,
+    deleteBook
 }
 
 export default booksService

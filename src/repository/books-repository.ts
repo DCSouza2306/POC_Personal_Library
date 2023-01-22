@@ -63,13 +63,24 @@ async function updateBook(book: book, compId: number, authorId: number){
     }
 }
 
+async function deleteBook(id: number){
+    try{
+        db.query(`
+        DELETE FROM books WHERE id = $1
+        `,[id])
+    } catch(error){
+        throw error
+    }
+}
+
 const booksRepository = {
     getPublishingCompId,
     getAuthorId,
     insertBook,
     getBooks,
     getBooksByName,
-    updateBook
+    updateBook,
+    deleteBook
 }
 
 export default booksRepository

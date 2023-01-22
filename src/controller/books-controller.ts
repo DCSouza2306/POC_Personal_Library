@@ -30,7 +30,25 @@ export async function updateBook(req: Request, res: Response){
         const params = req.params;
         const id = Number(params.id);
 
-        await booksService.updateBook(req.body, id)
+        await booksService.updateBook(req.body, id);
+
+        res.sendStatus(httpStatus.OK)
+    } catch(error){
+        if(error.name == "NotFoundError"){
+            return res.status(httpStatus.NOT_FOUND).send(error.message)
+         }
+ 
+         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
+    }
+}
+
+export async function deleteBook(req: Request, res: Response){
+    try{
+        const params = req.params;
+        const id = Number(params.id);
+
+        await booksService.deleteBook(id);
+
     } catch(error){
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
     }
