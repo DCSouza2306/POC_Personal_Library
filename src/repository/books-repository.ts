@@ -102,6 +102,26 @@ async function postAuthor(author: string){
     }
 }
 
+async function getCompanyByName(company: string){
+    try{
+        return db.query(`
+            SELECT * FROM "publishing_companies" WHERE name = $1;
+        `,[company])
+    } catch(error) {
+        throw error;
+    }
+}
+
+async function postCompany(company: string){
+    try{
+        return db.query(`
+            INSERT INTO "publishing_companies" (name) VALUES ($1)
+        `,[company])
+    } catch(error) {
+        throw error;
+    }
+}
+
 const booksRepository = {
     getPublishingCompId,
     getAuthorId,
@@ -112,7 +132,9 @@ const booksRepository = {
     updateBook,
     deleteBook,
     getAuthorByName,
-    postAuthor
+    postAuthor,
+    getCompanyByName,
+    postCompany
 }
 
 export default booksRepository

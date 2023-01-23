@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import booksService from "../services/books-service.js";
 import httpStatus from "http-status";
-import { author } from "../protocols.js";
+import { author, publishingCompany } from "../protocols.js";
 
 export async function postNewBook(req: Request, res: Response) {
     try {
@@ -73,7 +73,20 @@ export async function postAuthor(req: Request, res: Response){
         await booksService.postAuthor(author.name);
         res.sendStatus(httpStatus.CREATED)
     } catch(error){
+        if(error.name == "ConflictError"){
+            return res.status(httpStatus.CONFLICT).send(error.message)
+        }
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
     }
 }
+
+export async function postPublishingCompany(req: Request, res: Response){
+    try{
+        const publishCompany = req.body as publishingCompany;
+        await booksService.postPublishingCompany(publishCompany.name)
+    } catch(error) {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
+    }
+}
+
 

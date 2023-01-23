@@ -10,6 +10,10 @@ export type author = {
     name: string
 }
 
+export type publishingCompany = {
+    name: string,
+}
+
 
 export type ErrorModel = {
     name: string,

@@ -87,13 +87,27 @@ async function postAuthor(author: string){
     }
 }
 
+async function postPublishingCompany(company: string){
+    try{
+        const companyExist = await booksRepository.getCompanyByName(company);
+        if(companyExist.rowCount == 0){
+            throw conflictError("Company already registred")
+        }
+
+        await booksRepository.postCompany(company)
+    } catch(error) {
+        throw error
+    }
+}
+
 const booksService = {
     postBook,
     getBooks,
     updateBook,
     deleteBook,
     getBookByAuthor,
-    postAuthor
+    postAuthor,
+    postPublishingCompany
 }
 
 export default booksService
