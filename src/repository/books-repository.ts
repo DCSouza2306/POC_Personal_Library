@@ -1,6 +1,5 @@
-import { number } from "joi";
 import db from "../database/database.js";
-import { CompanyEntity, AuthorEntity, book, BookEntity } from "../protocols.js";
+import { CompanyEntity, AuthorEntity, book, BookEntity, author } from "../protocols.js";
 
 async function getPublishingCompId(compName: string){
     try{
@@ -83,6 +82,26 @@ async function getBookByAuthor(id: number){
     }
 }
 
+async function getAuthorByName(author: string){
+    try{
+        return db.query<author>(`
+            SELECT * FROM authors WHERE name = $1;
+        `,[author])
+    } catch(error) {
+        throw error
+    }
+}
+
+async function postAuthor(author: string){
+    try{
+        return db.query(`
+            INSERT INTO authors (name) VALUES ($1);
+        `,[author])
+    } catch(error) {
+        throw error
+    }
+}
+
 const booksRepository = {
     getPublishingCompId,
     getAuthorId,
@@ -91,7 +110,9 @@ const booksRepository = {
     getBooksByName,
     getBookByAuthor,
     updateBook,
-    deleteBook
+    deleteBook,
+    getAuthorByName,
+    postAuthor
 }
 
 export default booksRepository

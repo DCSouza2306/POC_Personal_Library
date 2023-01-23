@@ -6,6 +6,10 @@ export type book = {
     edition: string
 }
 
+export type author = {
+    name: string
+}
+
 
 export type ErrorModel = {
     name: string,

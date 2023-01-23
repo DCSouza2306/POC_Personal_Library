@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import booksService from "../services/books-service.js";
 import httpStatus from "http-status";
+import { author } from "../protocols.js";
 
 export async function postNewBook(req: Request, res: Response) {
     try {
@@ -61,6 +62,16 @@ export async function getBookByAuthor(req: Request, res: Response){
 
         const books = await booksService.getBookByAuthor(id);
         res.status(httpStatus.OK).send(books.rows)
+    } catch(error){
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
+    }
+}
+
+export async function postAuthor(req: Request, res: Response){
+    try{
+        const author = req.body as author
+        await booksService.postAuthor(author.name);
+        res.sendStatus(httpStatus.CREATED)
     } catch(error){
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
     }

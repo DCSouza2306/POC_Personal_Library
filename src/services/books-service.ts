@@ -1,6 +1,7 @@
 import { book } from "../protocols.js";
 import booksRepository from "../repository/books-repository.js";
 import { notFoundError } from "../errors/not-found-error.js";
+import { conflictError } from "../errors/conflict-error.js";
 
 async function postBook(book: book){
     try{    
@@ -73,12 +74,26 @@ async function getBookByAuthor(id: number){
     }
 }
 
+async function postAuthor(author: string){
+    try{
+        const authorExist = await booksRepository.getAuthorByName(author);
+        if(authorExist.rowCount == 0){
+            throw conflictError("Author already registred")
+        }
+
+        await booksRepository.postAuthor(author)
+    } catch(error) {
+        throw error
+    }
+}
+
 const booksService = {
     postBook,
     getBooks,
     updateBook,
     deleteBook,
-    getBookByAuthor
+    getBookByAuthor,
+    postAuthor
 }
 
 export default booksService
