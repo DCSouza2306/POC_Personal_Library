@@ -7,7 +7,7 @@ const db = new Pool({
   port: 5432,
   user: "postgres",
   password: "copadomundo2306",
-  database: "personal_library",
+  database: "personal_library", // change database name
 
 });
 
