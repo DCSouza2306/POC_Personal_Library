@@ -51,7 +51,12 @@ async function updateBook(book: book, id: number){
         };
         const authorId = author.rows[0].id;
 
-        await booksRepository.updateBook(book, compId, authorId);
+        const bookExist = await booksRepository.getBookById(id)
+        if(bookExist.rowCount == 0){
+            throw notFoundError("Can not found book")
+        }
+
+        await booksRepository.updateBook(book, compId, authorId, id);
     } catch(error) {
         throw error
     }
@@ -59,6 +64,10 @@ async function updateBook(book: book, id: number){
 
 async function deleteBook(id: number){
     try{
+        const bookExist = await booksRepository.getBookById(id);
+        if(bookExist.rowCount == 0){
+            throw notFoundError("Book not found")
+        }
         await booksRepository.deleteBook(id)
     } catch(error){
         throw error
@@ -67,6 +76,10 @@ async function deleteBook(id: number){
 
 async function getBookByAuthor(id: number){
     try{
+        const authorExist = await booksRepository.getAuthorById(id);
+        if(authorExist.rowCount == 0){
+            throw notFoundError("Can not found author")
+        }
        const books = await booksRepository.getBookByAuthor(id);
         return books;
     } catch(error){
@@ -77,7 +90,7 @@ async function getBookByAuthor(id: number){
 async function postAuthor(author: string){
     try{
         const authorExist = await booksRepository.getAuthorByName(author);
-        if(authorExist.rowCount == 0){
+        if(authorExist.rowCount != 0){
             throw conflictError("Author already registred")
         }
 
@@ -90,7 +103,7 @@ async function postAuthor(author: string){
 async function postPublishingCompany(company: string){
     try{
         const companyExist = await booksRepository.getCompanyByName(company);
-        if(companyExist.rowCount == 0){
+        if(companyExist.rowCount != 0){
             throw conflictError("Company already registred")
         }
 

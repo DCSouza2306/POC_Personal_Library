@@ -1,3 +1,4 @@
+import { brotliDecompress } from "zlib";
 import db from "../database/database.js";
 import { CompanyEntity, AuthorEntity, book, BookEntity, author } from "../protocols.js";
 
@@ -24,7 +25,7 @@ async function getAuthorId(author: string){
 async function insertBook(book: book, compId: number, authorId: number){
     try{
         return db.query(`
-            INSERT INTO books ("title","author_id" "publishing_comp_id", "year", "edition")
+            INSERT INTO books ("title","author_id", "publishing_comp_id", "year", "edition")
             VALUES ($1, $2, $3, $4, $5);
         `,[book.title, authorId, compId, book.year, book.edition])
     } catch(error) {
@@ -35,8 +36,21 @@ async function insertBook(book: book, compId: number, authorId: number){
 async function getBooks(){
     try{
         return db.query<BookEntity>(`
-            SELECT * FROM books;
+            SELECT books.title, authors.name AS "author","publishing_companies".name AS publishCompany, books.year, books.edition 
+            FROM books 
+            JOIN authors ON authors.id = books."author_id"
+            JOIN "publishing_companies" ON "publishing_companies".id = books."publishing_comp_id";
         `)
+    } catch(error) {
+        throw error
+    }
+}
+
+async function getBookById(id: number){
+    try{
+        return db.query(`
+            SELECT * FROM books WHERE id = $1
+        `,[id])
     } catch(error) {
         throw error
     }
@@ -45,18 +59,23 @@ async function getBooks(){
 async function getBooksByName(name: string){
     try{
         return db.query<BookEntity>(`
-            SELECT * FROM books WHERE "title" ILIKE '%' || $1 || '%';
+        SELECT books.title, authors.name AS "author","publishing_companies".name AS publishCompany, books.year, books.edition 
+        FROM books 
+        JOIN authors ON authors.id = books."author_id"
+        JOIN "publishing_companies" ON "publishing_companies".id = books."publishing_comp_id"
+        WHERE "title" ILIKE '%' || $1 || '%';
         `,[name])
     } catch(error) {
         throw error
     }
 }
 
-async function updateBook(book: book, compId: number, authorId: number){
+async function updateBook(book: book, compId: number, authorId: number, bookId: number){
     try{
         return db.query(`
             UPDATE books SET title = $1, "author_id" = $2, "publishing_comp_id" = $3, year = $4, edition = $5
-        `,[book.title, authorId, compId, book.year, book.edition])
+            WHERE id = $6
+        `,[book.title, authorId, compId, book.year, book.edition, bookId])
     } catch(error) {
         throw error
     }
@@ -76,6 +95,16 @@ async function getBookByAuthor(id: number){
     try{
         return db.query(`
             SELECT * FROM books WHERE "author_id" = $1
+        `,[id])
+    } catch(error){
+        throw error
+    }
+}
+
+async function getAuthorById(id: number){
+    try{
+        return db.query(`
+            SELECT * FROM authors WHERE id = $1
         `,[id])
     } catch(error){
         throw error
@@ -127,6 +156,7 @@ const booksRepository = {
     getAuthorId,
     insertBook,
     getBooks,
+    getBookById,
     getBooksByName,
     getBookByAuthor,
     updateBook,
@@ -134,7 +164,8 @@ const booksRepository = {
     getAuthorByName,
     postAuthor,
     getCompanyByName,
-    postCompany
+    postCompany,
+    getAuthorById
 }
 
 export default booksRepository

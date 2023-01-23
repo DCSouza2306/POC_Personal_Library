@@ -49,7 +49,7 @@ export async function deleteBook(req: Request, res: Response){
         const id = Number(params.id);
 
         await booksService.deleteBook(id);
-
+        res.sendStatus(httpStatus.OK)
     } catch(error){
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
     }
@@ -83,7 +83,8 @@ export async function postAuthor(req: Request, res: Response){
 export async function postPublishingCompany(req: Request, res: Response){
     try{
         const publishCompany = req.body as publishingCompany;
-        await booksService.postPublishingCompany(publishCompany.name)
+        await booksService.postPublishingCompany(publishCompany.name);
+        res.sendStatus(httpStatus.CREATED)
     } catch(error) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message)
     }

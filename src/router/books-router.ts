@@ -19,8 +19,8 @@ routerBook.post("/", schemaValidation(bookSchema), postNewBook);
 routerBook.get("/", getBooks);
 routerBook.patch("/:id", schemaValidation(bookSchema), updateBook);
 routerBook.delete("/:id", deleteBook);
-routerBook.post("/author/:id", getBookByAuthor);
-routerBook.post("author", schemaValidation(authorSchema), postAuthor);
+routerBook.get("/author/:id", getBookByAuthor);
+routerBook.post("/author", schemaValidation(authorSchema), postAuthor);
 routerBook.post("/company", schemaValidation(publishingCompanySchema), postPublishingCompany)
 
 
