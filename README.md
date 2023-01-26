@@ -21,6 +21,7 @@ npm run dev
 In this backend we have the following routes, with their expected returns and parameters:
 
 1. GET ("/books") -> This route return an array of objects in the following format:
+```
 [
   {
     "title": "Guerra dos Tronos",
@@ -44,10 +45,11 @@ In this backend we have the following routes, with their expected returns and pa
   "edition": "3"
 }
 ];
-
+```
 In this route, you can search a book name using queries, for example 
 
 GET ("/books?name=Senhor dos"), the result is:
+```
 [
     {
     "title":"Senhor dos Aneis: A Sociedade do Anel",
@@ -58,8 +60,9 @@ GET ("/books?name=Senhor dos"), the result is:
     }
 ];
 
-
+```
 2. POST ("/books") -> This route insert a new book in the database receive an objecti with de following format:
+```
 {
   "title":"Senhor dos Aneis: A Sociedade do Anel",
   "author": "J.R.R Tolkien",
@@ -67,7 +70,7 @@ GET ("/books?name=Senhor dos"), the result is:
   "year": "2012",
   "edition": "3"
 }
-
+```
 3. PATCH ("/books/:id") -> This route updates an existing book in the database and receives the id by req.params and the element to be updated by body, using the same format as the POST ("/books");
 
 4. DELETE ("/books/:id") -> This route delete an existing book in the database and receise the id by req.params;
@@ -75,11 +78,14 @@ GET ("/books?name=Senhor dos"), the result is:
 5. GET ("/books/author/:id") -> This route returns an array of objects using the author's id to filter only the books written by him;
 
 6. POST ("/books/author") -> This route insert a new author in database with the following format:
+```
 {
     "name": "Dan Brown"
 };
-
+```
 7. POST ("/books/company") -> This route insert a new publishing company in database with the following format:
+```
 {
     "name": "Rocco"
 }
+```
